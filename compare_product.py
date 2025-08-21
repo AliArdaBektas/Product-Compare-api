@@ -1,0 +1,79 @@
+import numbers
+
+import requests
+import random
+
+base_url = "https://dummyjson.com/products"
+
+print("Welcome to the Product Comparison! ")
+start = input("Do you wanna choose the products by yourself or you want me to chose? (me/you) :")
+
+
+def random_product():
+    numbers = []
+    while len(numbers) < 1:
+        num1 = random.randint(1, 30)
+        if num1 not in numbers:
+            numbers.append(num1)
+            url1 = f"{base_url}/{num1}"
+            response = requests.get(url1)
+            data = response.json()
+            title1 = data["title"]
+            price1 = float(data["price"])
+    while len(numbers) < 2:
+        num2 = random.randint(1, 30)
+        if num2 not in numbers:
+            numbers.append(num2)
+            url2 = f"{base_url}/{num2}"
+            response = requests.get(url2)
+            data2 = response.json()
+            title2 = data2["title"]
+            price2 = float(data2["price"])
+    return (title1, title2, price1, price2)
+
+def compare_randoms():
+    title1, title2 , price1, price2, = random_product()
+    print(f"Your first product is: {title1} the price is: {price1}")
+    print(f"Your second product is: {title2} the price is: {price2}")
+
+
+    if price1 > price2:
+        print(f"{title1} is more expensive than {title2}")
+    else:
+        print(f"{title1} is more cheaper than {title2}")
+
+def you_compare():
+    num3 = []
+    num_pick1 = input("Please give me an ID:")
+    num3.append(num_pick1)
+    url3 = f"{base_url}/{num_pick1}"
+    response = requests.get(url3)
+    data3 = response.json()
+    title3 = data3["title"]
+    price3 = data3["price"]
+
+    while len(num3) < 2:
+        num_pick2 = input("Please give me the second ID:")
+        if num_pick2 not in num3:
+            num3.append(num_pick2)
+            url4 = f"{base_url}/{num_pick2}"
+            response = requests.get(url4)
+            data4 = response.json()
+            title4 = data4["title"]
+            price4 = data4["price"]
+    return (title3, title4, price3, price4)
+def you_compare2():
+    title3, title4, price3, price4 = you_compare()
+    print(f"Your first product is: {title3} the price is: {price3}")
+    print(f"Your second product is: {title4} the price is: {price4}")
+    if price3 > price4:
+        print(f"{title3} is more expensive than {title4}")
+    else:
+        print(f"{title3} is more cheaper than {title4}")
+
+if start == "me":
+    you_compare2()
+elif start == "you":
+    compare_randoms()
+
+
